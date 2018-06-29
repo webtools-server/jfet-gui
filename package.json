@@ -2,7 +2,7 @@
   "name": "jfet-gui",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,6 +12,9 @@
     "url": "http://git.jtjr.com/h5_webtools_grp/jfet-gui.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "author": "canye.wu@jyblife.com",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^2.0.3"
+  }
 }
