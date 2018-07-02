@@ -1,9 +1,5 @@
 <template>
   <div>
-    <!-- breadcrumb start  -->
-    <tp-breadcrumb></tp-breadcrumb>
-    <!-- breadcrumb end  -->
-
     <div>
       <h3>产品列表：</h3>
       <product-list></product-list>
