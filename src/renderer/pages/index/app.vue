@@ -22,7 +22,7 @@
             </li>
           </ul>
         </el-aside>
-        <el-main>
+        <el-main class="app-body__main">
           <div class="app-body__content">
             <router-view></router-view>
           </div>
@@ -66,6 +66,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.app-body__main {
+  padding: 0;
+}
+
 .app-body__aside {
   width: 68px;
   height: 100vh;

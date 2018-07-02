@@ -17,7 +17,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: calc(100vh - 40px);
+  height: 100vh;
 }
 
 .project-desc {
