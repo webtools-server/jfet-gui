@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <meta name="keywords" content="{{keywords}}">
+    <meta name="description" content="{{description}}">
+    <meta name="render" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    {{#each cssFile}}
+    <link rel="stylesheet" href="{{require .}}">
+    {{/each}}
+    {{> global-var }}
+  </head>
+  <body>
+    {% body %}
+    {{#each cdnURLs}}
+        <script src="{{.}}"></script>
+    {{/each}}
+    {{#each jsFile}}
+    <script src="{{require .}}"></script>
+    {{/each}}
+  </body>
+</html>

@@ -2,8 +2,11 @@
   "name": "jfet-gui",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "./src/main/index.js",
   "scripts": {
+    "dev": "jfet build -w & jfet server -l -c ./src/renderer/public",
+    "build:test": "cross-env BUILD_ENV=test NODE_ENV=test jfet build",
+    "build:prod": "cross-env BUILD_ENV=production NODE_ENV=production jfet build",
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,6 +18,13 @@
   "author": "canye.wu@jyblife.com",
   "license": "MIT",
   "devDependencies": {
+    "@jyb/eslint-config-jyb": "^1.0.1",
+    "eslint": "^4.7.1"
+  },
+  "dependencies": {
     "electron": "^2.0.3"
+  },
+  "jfetOptions": {
+    "configFilePath": "src/renderer"
   }
 }
