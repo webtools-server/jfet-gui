@@ -50,6 +50,8 @@ module.exports = {
       }
     });
 
+    context.addBlock(setTarget('electron-renderer'));
+
     context.on('before', () => {
       fse.emptyDirSync(publicDir);
     });
@@ -67,3 +69,8 @@ module.exports = {
     });
   }
 };
+
+function setTarget(target = 'web') {
+  return (context, util) => util.merge({ target });
+}
+
