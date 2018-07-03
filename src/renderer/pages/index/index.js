@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import ElementUI from 'element-ui';
@@ -10,6 +11,7 @@ import { normalizeCurrency } from '@/util/filter';
 import App from './app.vue';
 import routes from './route';
 
+import './event';
 import './index.scss';
 
 Vue.use(VueRouter);

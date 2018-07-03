@@ -1,17 +1,17 @@
 <template>
   <div class="project-wrapper">
     <!-- 暂无项目 -->
-    <div class="no-project" v-if="noProject">
+    <div class="no-project" v-if="projects.length === 0">
       <p class="no-project__desc">暂无项目，请先打开项目或创建项目</p>
       <div class="no-project__section">
-        <el-button round icon="el-icon-fa-folder-open-o" size="mini">打开项目</el-button>
+        <el-button @click="handleOpenProject" round icon="el-icon-fa-folder-open-o" size="mini">打开项目</el-button>
         <el-button round type="primary" icon="el-icon-fa-plus" size="mini">创建项目</el-button>
       </div>
     </div>
     <!-- 项目列表 -->
-    <div class="project-list" v-if="!noProject">
+    <div class="project-list" v-if="projects.length > 0">
       <div class="project-list__head clearfix">
-        <strong class="ui-fl-l ui-pl-20">项目总数：3</strong>
+        <strong class="ui-fl-l ui-pl-20">项目总数：{{projects.length}}</strong>
         <div class="ui-fl-r">
           <el-button @click="handleOpenProject" type="text" icon="el-icon-fa-folder-open-o" size="mini">打开项目</el-button>
           <el-button type="text" icon="el-icon-fa-plus" size="mini">创建项目</el-button>
@@ -19,10 +19,13 @@
       </div>
       <div class="project-list__body">
         <el-row :gutter="20">
-          <el-col :span="8">
+          <el-col :span="8" v-for="(item, index) in projects" :key="index">
             <div class="ui-mb-14 project-list__item" @click="handleViewProject">
-              <strong class="project-list__item-title">ceshi</strong>
-              <p class="project-list__item-desc">/Users/wulincan/iceworks-workspace/ceshi</p>
+              <strong class="project-list__item-title">{{item.name}}</strong>
+              <p class="project-list__item-desc">{{item.path}}</p>
+              <div class="operate-box">
+                <i @click="handleDeleteProject(item)" class="el-icon-delete"></i>
+              </div>
             </div>
           </el-col>
         </el-row>
@@ -31,15 +34,30 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   data() {
-    return {
-      noProject: false
-    };
+    return {};
+  },
+  computed: mapGetters({
+    projects: 'project/projectList'
+  }),
+  created() {
+    this.$store.dispatch('project/initProject');
   },
   methods: {
     handleOpenProject() {
       this.$store.dispatch('project/openProject');
+    },
+    handleDeleteProject(item) {
+      this.$confirm('此操作将删除该项目, 但是不删除文件，是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('project/deleteProject', item);
+      }).catch(() => {});
     },
     handleViewProject() {
 
@@ -80,6 +98,7 @@ export default {
 }
 
 .project-list__item {
+  position: relative;
   border-radius: 4px;
   background-color: #fff;
   height: 100px;
@@ -87,6 +106,12 @@ export default {
   padding-right: 8px;
   overflow: hidden;
   cursor: pointer;
+
+  &:hover {
+    .operate-box {
+      display: block;
+    }
+  }
 }
 
 .project-list__item-title {
@@ -108,6 +133,14 @@ export default {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+
+.operate-box {
+  display: none;
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 9;
 }
 </style>
 

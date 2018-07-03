@@ -5,10 +5,10 @@
 const { ipcMain, dialog } = require('electron');
 
 // 打开目录
-ipcMain.on('open-dir-dialog', (event) => {
-  dialog.showOpenDialog({
+ipcMain.on('open-dir-dialog', (event, args) => {
+  dialog.showOpenDialog(Object.assign({
     properties: ['openDirectory']
-  }, (files) => {
+  }, args), (files) => {
     if (files) {
       event.sender.send('selected-directory', files);
     }
