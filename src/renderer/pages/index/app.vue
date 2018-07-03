@@ -74,8 +74,9 @@ export default {
   width: 68px;
   height: 100vh;
   box-sizing: border-box;
-  background-color: #3080fe;
-  color: #fff;
+  // background-color: #3080fe;
+  background-color: #171415;
+  color: rgba(255, 255, 255, .7);
   padding-top: 35px;
 }
 
@@ -85,6 +86,10 @@ export default {
   padding-bottom: 10px;
   text-align: center;
   cursor: pointer;
+
+  &:hover {
+    color: #fff;
+  }
 }
 
 .app-body__aside-item_active {
@@ -99,6 +104,7 @@ export default {
     border-radius: 2px;
     background-color: #fff;
   }
+  color: #fff;
 }
 
 .app-body__aside-item-icon {
@@ -110,5 +116,10 @@ export default {
   padding-top: 8px;
   text-align: center;
   font-size: 12px;
+}
+
+.app-body__content {
+  height: 100vh;
+  overflow-y: scroll;
 }
 </style>
