@@ -13,14 +13,14 @@
       <div class="project-list__head clearfix">
         <strong class="ui-fl-l ui-pl-20">项目总数：3</strong>
         <div class="ui-fl-r">
-          <el-button type="text" icon="el-icon-fa-folder-open-o" size="mini">打开项目</el-button>
+          <el-button @click="handleOpenProject" type="text" icon="el-icon-fa-folder-open-o" size="mini">打开项目</el-button>
           <el-button type="text" icon="el-icon-fa-plus" size="mini">创建项目</el-button>
         </div>
       </div>
       <div class="project-list__body">
         <el-row :gutter="20">
           <el-col :span="8">
-            <div class="ui-mb-14 project-list__item">
+            <div class="ui-mb-14 project-list__item" @click="handleViewProject">
               <strong class="project-list__item-title">ceshi</strong>
               <p class="project-list__item-desc">/Users/wulincan/iceworks-workspace/ceshi</p>
             </div>
@@ -36,6 +36,14 @@ export default {
     return {
       noProject: false
     };
+  },
+  methods: {
+    handleOpenProject() {
+      this.$store.dispatch('project/openProject');
+    },
+    handleViewProject() {
+
+    }
   }
 };
 </script>

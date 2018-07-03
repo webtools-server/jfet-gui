@@ -6,9 +6,14 @@ import Vue from 'vue';
 import NotFound from '@/components/404.vue';
 import Abstract from '@/components/abstract.vue';
 
-import HelpIndex from './modules/help/index.vue';
+// project
 import ProjectIndex from './modules/project/index.vue';
+import ProjectDetail from './modules/project/detail.vue';
+// help
+import HelpIndex from './modules/help/index.vue';
+// setting
 import SettingIndex from './modules/setting/index.vue';
+// template
 import TemplateIndex from './modules/template/index.vue';
 
 const root = Vue.component('root', {
@@ -38,6 +43,13 @@ const routes = [
             name: 'index',
             title: '项目主页',
             component: ProjectIndex,
+            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+          },
+          {
+            path: 'detail',
+            name: 'detail',
+            title: '项目详情',
+            component: ProjectDetail,
             imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
           }
         ]
