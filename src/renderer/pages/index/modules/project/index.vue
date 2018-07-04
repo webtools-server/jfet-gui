@@ -20,7 +20,7 @@
       <div class="project-list__body">
         <el-row :gutter="20">
           <el-col :span="8" v-for="(item, index) in projects" :key="index">
-            <div class="ui-mb-14 project-list__item" @click="handleViewProject">
+            <div class="ui-mb-14 project-list__item" @click="handleViewProject(item)">
               <strong class="project-list__item-title">{{item.name}}</strong>
               <p class="project-list__item-desc">{{item.path}}</p>
               <div class="operate-box">
@@ -59,8 +59,8 @@ export default {
         this.$store.dispatch('project/deleteProject', item);
       }).catch(() => {});
     },
-    handleViewProject() {
-
+    handleViewProject(item) {
+      
     }
   }
 };
@@ -109,7 +109,7 @@ export default {
 
   &:hover {
     .operate-box {
-      display: block;
+      opacity: 1;
     }
   }
 }
@@ -136,11 +136,12 @@ export default {
 }
 
 .operate-box {
-  display: none;
   position: absolute;
   top: 6px;
   right: 6px;
   z-index: 9;
+  opacity: 0;
+  transition: opacity .5s ease-out;
 }
 </style>
 

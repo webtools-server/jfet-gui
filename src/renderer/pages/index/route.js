@@ -25,7 +25,7 @@ const routes = [
     path: '/404',
     component: NotFound,
     name: '404',
-    title: '404'
+    meta: { title: '404' }
   },
   {
     path: '/',
@@ -36,21 +36,20 @@ const routes = [
         path: 'project',
         component: Abstract,
         name: 'project',
-        title: '项目',
+        meta: { icon: 'el-icon-fa-product-hunt', title: '项目' },
+        redirect: 'project/index',
         children: [
           {
             path: 'index',
             name: 'index',
-            title: '项目主页',
-            component: ProjectIndex,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            meta: { title: '项目主页' },
+            component: ProjectIndex
           },
           {
             path: 'detail',
             name: 'detail',
-            title: '项目详情',
-            component: ProjectDetail,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            meta: { title: '项目详情' },
+            component: ProjectDetail
           }
         ]
       },
@@ -58,14 +57,14 @@ const routes = [
         path: 'template',
         component: Abstract,
         name: 'template',
-        title: '模板',
+        meta: { icon: 'el-icon-fa-align-left', title: '模板' },
+        redirect: 'template/index',
         children: [
           {
             path: 'index',
             name: 'index',
-            title: '模板主页',
-            component: TemplateIndex,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            meta: { title: '模板主页' },
+            component: TemplateIndex
           }
         ]
       },
@@ -73,14 +72,14 @@ const routes = [
         path: 'setting',
         component: Abstract,
         name: 'setting',
-        title: '设置',
+        meta: { icon: 'el-icon-fa-cog', title: '设置' },
+        redirect: 'setting/index',
         children: [
           {
             path: 'index',
             name: 'index',
-            title: '设置主页',
-            component: SettingIndex,
-            imgUrl: 'https://o0p2g4ul8.qnssl.com/vsite%2Fbackground.jpg'
+            meta: { title: '设置主页' },
+            component: SettingIndex
           }
         ]
       },
@@ -88,7 +87,7 @@ const routes = [
         path: 'help',
         component: HelpIndex,
         name: 'help',
-        title: '帮助'
+        meta: { icon: 'el-icon-fa-question-circle', title: '帮助' }
       }
     ]
   },

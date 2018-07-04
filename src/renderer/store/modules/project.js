@@ -23,7 +23,7 @@ const actions = {
   initProject({ commit }) {
     const projectList = lsStorage.get(PROJECT_STORAGE_NAME);
     if (Array.isArray(projectList)) {
-      commit('addProject', projectList);
+      commit('initProject', projectList);
     }
   },
   // 打开项目
