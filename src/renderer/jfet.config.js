@@ -51,6 +51,12 @@ module.exports = {
     });
 
     context.addBlock(setTarget('electron-renderer'));
+    context.addBlock(setExternals((context, request, callback) => {
+      if (/^node-pty$/.test(request)) {
+        return callback(null, `commonjs ${request}`);
+      }
+      callback();
+    }));
 
     context.on('before', () => {
       fse.emptyDirSync(publicDir);
@@ -72,5 +78,15 @@ module.exports = {
 
 function setTarget(target = 'web') {
   return (context, util) => util.merge({ target });
+}
+
+function setExternals(externals) {
+  let ext = externals;
+  if (!Array.isArray(externals)) {
+    ext = [externals];
+  }
+  return (context, util) => util.merge({
+    externals: ext
+  });
 }
 

@@ -1,40 +1,70 @@
 
 
-import { ipcRenderer } from 'electron';
-import path from 'path';
-import { homedir } from 'os';
-import { PROJECT_STORAGE_NAME } from '@/util/constants';
+import { PROJECT_STORAGE_NAME, JFET_GUI_SETTING_DIR_NAME, JFET_GUI_COMMAND_SETTING_FILE } from '@/util/constants';
 import lsStorage from '@/util/ls_storage';
 import { Notification } from 'element-ui';
+import fse from 'fs-extra';
+import path from 'path';
 
 // initial state
 const initialState = {
-  list: []
+  list: [], // 项目列表
+  command: [] // 命令行列表
 };
 
 // getters
 const initialGetters = {
-  projectList: state => state.list
+  projectList: state => state.list,
+  commandList: state => state.command
 };
 
 // actions
 const actions = {
-  // 初始化项目
-  initProject({ commit }) {
+  // 初始化项目列表
+  initProjectList({ commit }) {
     const projectList = lsStorage.get(PROJECT_STORAGE_NAME);
     if (Array.isArray(projectList)) {
-      commit('initProject', projectList);
+      commit('initProjectList', projectList);
     }
   },
-  // 打开项目
-  openProject() {
-    ipcRenderer.send('open-dir-dialog', {
-      defaultPath: path.join(homedir(), 'jfet-workspace')
-    });
+  // 初始化项目
+  initProject({ commit }, project) {
+    const commandFilePath = path.join(
+      project.path,
+      JFET_GUI_SETTING_DIR_NAME,
+      JFET_GUI_COMMAND_SETTING_FILE
+    );
+    const existCommandFile = fse.pathExistsSync(commandFilePath);
+    // 如果项目根目录存在gui命令行配置
+    if (existCommandFile) {
+      const commandFileContent = fse.readJsonSync(commandFilePath);
+      commit('initCommand', commandFileContent.command);
+      return;
+    }
+
+    const packageJsonPath = path.join(project.path, 'package.json');
+    const existPackageJson = fse.pathExistsSync(packageJsonPath);
+    // 如果项目根目录存在package.json文件
+    if (existPackageJson) {
+      const command = [];
+      const packageJsonContent = fse.readJsonSync(packageJsonPath);
+      const scripts = packageJsonContent.scripts || {};
+      for (const k in scripts) {
+        command.push({
+          name: k,
+          command: scripts[k],
+          key: k
+        });
+      }
+      commit('initCommand', command);
+      return;
+    }
   },
+  // 创建项目
   createProject() {
 
   },
+  // 添加项目
   addProject({ commit }, project) {
     let projectList = lsStorage.get(PROJECT_STORAGE_NAME);
     if (!projectList) {
@@ -53,26 +83,24 @@ const actions = {
     lsStorage.set(PROJECT_STORAGE_NAME, projectList);
     commit('addProject', project);
   },
+  // 删除项目
   deleteProject({ commit }, project) {
     const projectList = lsStorage.get(PROJECT_STORAGE_NAME);
     const index = projectList.findIndex(p => p.path === project.path);
     projectList.splice(index, 1);
     // 存储
     lsStorage.set(PROJECT_STORAGE_NAME, projectList);
-    commit('initProject', projectList);
+    commit('initProjectList', projectList);
   },
-  getProjectList({ commit }) {
-    // shop.getProductList().then((products) => {
-    //   if (products.code === 0) {
-    //     commit('setProducts', products.data);
-    //   }
-    // });
+  // 查询项目
+  queryProject(context, pathname) {
+    return lsStorage.get(PROJECT_STORAGE_NAME).filter(p => p.path === pathname)[0];
   }
 };
 
 // mutations
 const mutations = {
-  initProject(state, projects) {
+  initProjectList(state, projects = []) {
     state.list = projects;
   },
   addProject(state, project) {
@@ -82,12 +110,8 @@ const mutations = {
       state.list.push(project);
     }
   },
-  setProducts(state, products) {
-    state.all = products;
-  },
-  decrementProductInventory(state, { id }) {
-    const product = state.all.find(p => p.id === id);
-    product.inventory--;
+  initCommand(state, command = []) {
+    state.command = command;
   }
 };
 

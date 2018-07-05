@@ -22,7 +22,10 @@
     "eslint": "^4.7.1"
   },
   "dependencies": {
-    "electron": "^2.0.3"
+    "electron": "^2.0.3",
+    "node-pty": "^0.7.6",
+    "npm": "^6.1.0",
+    "npm-run-path": "^2.0.2"
   },
   "jfetOptions": {
     "configFilePath": "src/renderer"

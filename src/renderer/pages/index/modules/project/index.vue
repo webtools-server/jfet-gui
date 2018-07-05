@@ -24,7 +24,7 @@
               <strong class="project-list__item-title">{{item.name}}</strong>
               <p class="project-list__item-desc">{{item.path}}</p>
               <div class="operate-box">
-                <i @click="handleDeleteProject(item)" class="el-icon-delete"></i>
+                <i @click.stop="handleDeleteProject(item)" class="el-icon-delete"></i>
               </div>
             </div>
           </el-col>
@@ -35,6 +35,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import * as helper from '@/util/helper';
 
 export default {
   data() {
@@ -44,11 +45,11 @@ export default {
     projects: 'project/projectList'
   }),
   created() {
-    this.$store.dispatch('project/initProject');
+    this.$store.dispatch('project/initProjectList');
   },
   methods: {
     handleOpenProject() {
-      this.$store.dispatch('project/openProject');
+      helper.openProject();
     },
     handleDeleteProject(item) {
       this.$confirm('此操作将删除该项目, 但是不删除文件，是否继续?', '提示', {
@@ -60,7 +61,12 @@ export default {
       }).catch(() => {});
     },
     handleViewProject(item) {
-      
+      this.$router.push({
+        path: '/project/detail',
+        query: {
+          path: encodeURIComponent(item.path)
+        }
+      });
     }
   }
 };
