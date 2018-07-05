@@ -9,13 +9,15 @@ import path from 'path';
 // initial state
 const initialState = {
   list: [], // 项目列表
-  command: [] // 命令行列表
+  commands: [], // 命令行
+  dependencies: [] // 依赖
 };
 
 // getters
 const initialGetters = {
   projectList: state => state.list,
-  commandList: state => state.command
+  commands: state => state.commands,
+  dependencies: state => state.dependencies
 };
 
 // actions
@@ -35,29 +37,61 @@ const actions = {
       JFET_GUI_COMMAND_SETTING_FILE
     );
     const existCommandFile = fse.pathExistsSync(commandFilePath);
+    const packageJsonPath = path.join(project.path, 'package.json');
+    const existPackageJson = fse.pathExistsSync(packageJsonPath);
+    let initCommand = false;
+    let initDependencies = false;
+
     // 如果项目根目录存在gui命令行配置
     if (existCommandFile) {
       const commandFileContent = fse.readJsonSync(commandFilePath);
       commit('initCommand', commandFileContent.command);
-      return;
+      initCommand = true;
     }
 
-    const packageJsonPath = path.join(project.path, 'package.json');
-    const existPackageJson = fse.pathExistsSync(packageJsonPath);
-    // 如果项目根目录存在package.json文件
-    if (existPackageJson) {
+    if (existPackageJson) { // 如果项目根目录存在package.json文件
       const command = [];
       const packageJsonContent = fse.readJsonSync(packageJsonPath);
-      const scripts = packageJsonContent.scripts || {};
-      for (const k in scripts) {
-        command.push({
-          name: k,
-          command: scripts[k],
-          key: k
-        });
+      // 如果没有initCommand
+      if (!initCommand) {
+        const scripts = packageJsonContent.scripts || {};
+        for (const k in scripts) {
+          command.push({
+            name: k,
+            command: scripts[k],
+            key: k
+          });
+        }
+        commit('initCommand', command);
+        initCommand = true;
       }
-      commit('initCommand', command);
-      return;
+
+      // 依赖处理
+      const dependencies = packageJsonContent.dependencies || {};
+      const devDependencies = packageJsonContent.devDependencies || {};
+      const projectDeps = [].concat(
+        Object.keys(dependencies).map((dep) => {
+          return {
+            name: dep,
+            version: dependencies[dep]
+          };
+        }),
+        Object.keys(devDependencies).map((dep) => {
+          return {
+            name: dep,
+            version: devDependencies[dep]
+          };
+        })
+      );
+      commit('initDependencies', projectDeps);
+      initDependencies = true;
+    }
+
+    if (!initCommand) {
+      commit('initCommand', []);
+    }
+    if (!initDependencies) {
+      commit('initDependencies', []);
     }
   },
   // 创建项目
@@ -110,8 +144,11 @@ const mutations = {
       state.list.push(project);
     }
   },
-  initCommand(state, command = []) {
-    state.command = command;
+  initCommand(state, commands = {}) {
+    state.commands = commands;
+  },
+  initDependencies(state, dependencies = {}) {
+    state.dependencies = dependencies;
   }
 };
 

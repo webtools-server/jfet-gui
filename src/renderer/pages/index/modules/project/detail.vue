@@ -9,7 +9,7 @@
         </el-tooltip>
       </strong>
       <div class="ui-fl-r">
-        <el-button type="text" icon="el-icon-fa-wrench" size="mini">配置</el-button>
+        <el-button @click="handleProjectSetting" type="text" icon="el-icon-fa-wrench" size="mini">配置</el-button>
         <el-button @click="handleInstallDeps" type="text" icon="el-icon-fa-linode" size="mini">安装依赖</el-button>
         <el-button @click="handleOpenEditor" type="text" icon="el-icon-fa-code" size="mini">编辑器</el-button>
         <!-- <el-button @click="handleOpenTerminal" type="text" icon="el-icon-fa-terminal" size="mini">终端</el-button> -->
@@ -28,6 +28,43 @@
     <div class="project-detail__body">
       <terminal :project="project"></terminal>
     </div>
+    <el-dialog
+      class="project-detail__setting"
+      title="项目配置"
+      fullscreen
+      :visible.sync="projectSettingDialogVisible">
+      <div>
+        <el-tabs>
+          <el-tab-pane label="命令配置">
+            <el-table
+              :data="commands"
+              border
+              stripe
+              size="mini"
+              style="width: 100%">
+              <el-table-column prop="key" label="key" width="140"></el-table-column>
+              <el-table-column prop="name" label="名称" width="180"></el-table-column>
+              <el-table-column prop="command" label="命令"></el-table-column>
+            </el-table>
+            <!-- <div class="ui-pt-14 ui-ta-r">
+              <el-button icon="el-icon-fa-refresh" size="mini">同步</el-button>
+              <el-button type="primary" icon="el-icon-fa-floppy-o" size="mini">保存</el-button>
+            </div> -->
+          </el-tab-pane>
+          <el-tab-pane label="依赖管理">
+            <el-table
+              :data="dependencies"
+              border
+              stripe
+              size="mini"
+              style="width: 100%">
+              <el-table-column prop="name" label="名称"></el-table-column>
+              <el-table-column prop="version" label="版本"></el-table-column>
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -39,14 +76,16 @@ import terminal from '@/util/terminal';
 export default {
   data() {
     return {
-      project: {}
+      project: {},
+      projectSettingDialogVisible: false
     };
   },
   components: {
     Terminal
   },
   computed: mapGetters({
-    commands: 'project/commandList'
+    commands: 'project/commands',
+    dependencies: 'project/dependencies'
   }),
   async created() {
     const pathname = decodeURIComponent(this.$route.query.path);
@@ -60,6 +99,9 @@ export default {
     
   },
   methods: {
+    handleProjectSetting() {
+      this.projectSettingDialogVisible = true;
+    },
     handleOpenEditor() {
       helper.openEditor(this.project.path).then(this.onFulfilled);
     },
@@ -73,6 +115,7 @@ export default {
       terminal.writeTerminal(this.project.path, 'npm i' + '\r\n');
     },
     handleRunCommand(item) {
+      terminal.writeTerminal(this.project.path, item.command + '\r\n');
       console.log(item);
     },
     onFulfilled(result) {
@@ -90,9 +133,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.project-detail {
-
-}
 .project-detail__head {
   height: 50px;
   box-sizing: border-box;
@@ -134,5 +174,13 @@ export default {
   height: calc(100vh - 90px);
   padding: 8px;
   background-color: rgba(0, 0, 0, .85);
+}
+.project-detail__setting {
+  .el-dialog__header {
+    padding: 10px;
+  }
+  .el-dialog__body {
+    padding: 0 14px 14px 14px;
+  }
 }
 </style>
