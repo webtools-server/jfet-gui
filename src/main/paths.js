@@ -17,6 +17,9 @@ const pathEnv = [
   NODE_PATH,
   NPM_BIN_PATH
 ].filter(p => !!p).join(path.delimiter);
+
+// 临时处理
+delete npmEnv.npm_config_prefix;
 const processEnv = { ...npmEnv, FORCE_COLOR: 1 };
 
 if (env.isWin) {
