@@ -1,4 +1,6 @@
-
+/**
+ * 项目store
+ */
 
 import { PROJECT_STORAGE_NAME, JFET_GUI_SETTING_DIR_NAME, JFET_GUI_COMMAND_SETTING_FILE } from '@/util/constants';
 import lsStorage from '@/util/ls_storage';

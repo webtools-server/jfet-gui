@@ -21,6 +21,10 @@ export function openFolder(openPath = '') {
   shell.showItemInFolder(openPath);
 }
 
+export function openExternal(url) {
+  shell.openExternal(url);
+}
+
 export function openProject() {
   ipcRenderer.send('open-dir-dialog', {
     defaultPath: path.join(homedir(), 'jfet-workspace')

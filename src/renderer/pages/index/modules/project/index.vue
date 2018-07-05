@@ -5,7 +5,7 @@
       <p class="no-project__desc">暂无项目，请先打开项目或创建项目</p>
       <div class="no-project__section">
         <el-button @click="handleOpenProject" round icon="el-icon-fa-folder-open-o" size="mini">打开项目</el-button>
-        <el-button round type="primary" icon="el-icon-fa-plus" size="mini">创建项目</el-button>
+        <el-button round type="primary" icon="el-icon-fa-plus" size="mini" @click="handleNewProject">创建项目</el-button>
       </div>
     </div>
     <!-- 项目列表 -->
@@ -14,7 +14,7 @@
         <strong class="ui-fl-l ui-pl-20">项目总数：{{projects.length}}</strong>
         <div class="ui-fl-r">
           <el-button @click="handleOpenProject" type="text" icon="el-icon-fa-folder-open-o" size="mini">打开项目</el-button>
-          <el-button type="text" icon="el-icon-fa-plus" size="mini">创建项目</el-button>
+          <el-button type="text" icon="el-icon-fa-plus" size="mini" @click="handleNewProject">创建项目</el-button>
         </div>
       </div>
       <div class="project-list__body">
@@ -48,6 +48,9 @@ export default {
     this.$store.dispatch('project/initProjectList');
   },
   methods: {
+    handleNewProject() {
+      this.$router.push({ path: '/template/index' });
+    },
     handleOpenProject() {
       helper.openProject();
     },
