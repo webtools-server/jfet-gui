@@ -40,6 +40,12 @@ const WEBSTORM_BASE_PATH = env.isWin
   ? 'C:/Program Files (x86)/JetBrains/WebStorm 2017.1/bin/webstorm.exe'
   : '/Applications/WebStorm.app';
 
+// jfet网站
+const JFET_WEBSITE_URL = 'http://doc.fe.jyb.com/book/jfet-website/';
+
+// jfet API文档
+const JFET_API_DOC_URL = 'http://doc.fe.jyb.com/book/workflow/index.html';
+
 module.exports = {
   JFET_GUI_SETTING_DIR_NAME,
   JFET_GUI_COMMAND_SETTING_FILE,
@@ -51,5 +57,7 @@ module.exports = {
   WEBSTORM_NAME,
   VSCODE_BASE_PATH,
   SUBLIME_TEXT_3_BASE_PATH,
-  WEBSTORM_BASE_PATH
+  WEBSTORM_BASE_PATH,
+  JFET_WEBSITE_URL,
+  JFET_API_DOC_URL
 };
