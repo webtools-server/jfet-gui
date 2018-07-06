@@ -6,9 +6,9 @@ import { ipcRenderer } from 'electron';
 import path from 'path';
 import fse from 'fs-extra';
 import store from '@/store';
-import { Notification } from 'element-ui';
+import mainGlobal from '@/util/main_global';
 
-import { JFET_GUI_SETTING_DIR_NAME } from '@/util/constants';
+const { JFET_GUI_SETTING_DIR_NAME } = mainGlobal.constants;
 
 ipcRenderer.on('selected-directory', (event, args) => {
   if (Array.isArray(args)) {

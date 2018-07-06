@@ -46,6 +46,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.template-list {
+  height: 100vh;
+  overflow-y: scroll;
+}
+
 .template-list__body {
   padding: 20px;
 }

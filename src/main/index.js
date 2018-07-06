@@ -5,7 +5,10 @@
 const { app, BrowserWindow } = require('electron');
 const url = require('url');
 const path = require('path');
+
 const service = require('./service');
+const env = require('./env');
+const constants = require('./constants');
 
 require('./event');
 
@@ -71,3 +74,5 @@ app.on('activate', () => {
 // 也可以拆分成几个文件，然后用 require 导入。
 
 global.services = service;
+global.env = env;
+global.constants = constants;

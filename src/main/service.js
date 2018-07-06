@@ -3,7 +3,7 @@
  */
 
 const { exec } = require('child_process');
-const env = require('../shared/env');
+const env = require('./env');
 const path = require('path');
 
 function openEditor(basePath, openPath) {

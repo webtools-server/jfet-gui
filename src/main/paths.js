@@ -4,7 +4,7 @@
 
 const npmRunPath = require('npm-run-path');
 const path = require('path');
-const env = require('../shared/env');
+const env = require('./env');
 
 const APP_PATH = env.isDev ? path.join(process.cwd(), 'src') : path.join(process.resourcesPath, 'app');
 const NODE_PATH = path.join(APP_PATH, 'node');

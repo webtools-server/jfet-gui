@@ -2,19 +2,18 @@
  * helper
  */
 
-import { remote, ipcRenderer, shell } from 'electron';
+import { ipcRenderer, shell } from 'electron';
 import path from 'path';
 import { homedir } from 'os';
-
-const services = remote.getGlobal('services');
+import mainGlobal from '@/util/main_global';
 
 export function openEditor(openPath = '') {
   const basePath = '/Applications/Visual Studio Code.app';
-  return services.openEditor(basePath, openPath);
+  return mainGlobal.services.openEditor(basePath, openPath);
 }
 
 export function openTerminal(openPath = '') {
-  return services.openTerminal(openPath);
+  return mainGlobal.services.openTerminal(openPath);
 }
 
 export function openFolder(openPath = '') {

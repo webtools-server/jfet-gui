@@ -2,11 +2,13 @@
  * 项目store
  */
 
-import { PROJECT_STORAGE_NAME, JFET_GUI_SETTING_DIR_NAME, JFET_GUI_COMMAND_SETTING_FILE } from '@/util/constants';
+import mainGlobal from '@/util/main_global';
 import lsStorage from '@/util/ls_storage';
 import { Notification } from 'element-ui';
 import fse from 'fs-extra';
 import path from 'path';
+
+const { PROJECT_STORAGE_NAME, JFET_GUI_SETTING_DIR_NAME, JFET_GUI_COMMAND_SETTING_FILE } = mainGlobal.constants;
 
 // initial state
 const initialState = {
