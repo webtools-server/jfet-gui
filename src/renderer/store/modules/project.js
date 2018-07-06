@@ -4,7 +4,6 @@
 
 import mainGlobal from '@/util/main_global';
 import lsStorage from '@/util/ls_storage';
-import { Notification } from 'element-ui';
 import fse from 'fs-extra';
 import path from 'path';
 
@@ -99,7 +98,7 @@ const actions = {
     }
   },
   // 创建项目
-  createProject() {
+  createProject({ commit }, projectForm) {
 
   },
   // 添加项目
@@ -111,15 +110,16 @@ const actions = {
     // 判断项目是否已经存在
     const projects = projectList.filter(p => p.path === project.path);
     if (projects.length > 0) {
-      return Notification.error({
-        title: '错误',
+      return {
+        success: false,
         message: '项目已存在'
-      });
+      };
     }
     projectList.push(project);
     // 存储
     lsStorage.set(PROJECT_STORAGE_NAME, projectList);
     commit('addProject', project);
+    return { success: true };
   },
   // 删除项目
   deleteProject({ commit }, project) {

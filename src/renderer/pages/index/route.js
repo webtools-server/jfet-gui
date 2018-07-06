@@ -68,6 +68,21 @@ const routes = [
           }
         ]
       },
+      // {
+      //   path: '扩展',
+      //   component: Abstract,
+      //   name: 'extend',
+      //   meta: { icon: 'el-icon-fa-puzzle-piece', title: '扩展' },
+      //   redirect: 'extend/index',
+      //   children: [
+      //     {
+      //       path: 'index',
+      //       name: 'index',
+      //       meta: { title: '扩展主页' },
+      //       component: TemplateIndex
+      //     }
+      //   ]
+      // },
       {
         path: 'setting',
         component: Abstract,

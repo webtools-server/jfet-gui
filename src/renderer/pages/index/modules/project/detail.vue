@@ -26,7 +26,7 @@
         icon="el-icon-fa-play-circle">{{item.name}}</el-button>
     </div>
     <div class="project-detail__body">
-      <terminal :project="project"></terminal>
+      <terminal :project="project" @inited="handleTerminalInited"></terminal>
     </div>
     <el-dialog
       class="project-detail__setting"
@@ -87,18 +87,34 @@ export default {
     commands: 'project/commands',
     dependencies: 'project/dependencies'
   }),
-  async created() {
-    const pathname = decodeURIComponent(this.$route.query.path);
-    // 查询项目
-    const project = await this.$store.dispatch('project/queryProject', pathname);
-    // 初始化项目
-    this.$store.dispatch('project/initProject', project);
-    this.project = project || {};
+  created() {
+    this.init();
   },
   mounted() {
     
   },
   methods: {
+    init() {
+      const pathname = decodeURIComponent(this.$route.query.path);
+      // 查询项目
+      this.$store.dispatch('project/queryProject', pathname).then((project) => {
+        // 初始化项目
+        this.$store.dispatch('project/initProject', project);
+        this.project = project || {};
+      });
+    },
+    handleTerminalInited(term) {
+      if (this.$route.query.init) {
+        const template = this.project.template || {};
+        // jfet init -t 'https://npm.taobao.org' -f
+        const command = [`jfet init -t '${template.url}'`];
+        // 清空目录
+        if (template.force) {
+          command.push('-f');
+        }
+        terminal.writeTerminal(this.project.path, command.join(' ') + '\n');
+      }
+    },
     handleProjectSetting() {
       this.projectSettingDialogVisible = true;
     },
@@ -116,7 +132,6 @@ export default {
     },
     handleRunCommand(item) {
       terminal.writeTerminal(this.project.path, item.command + '\r\n');
-      console.log(item);
     },
     onFulfilled(result) {
       if (!result.success) {

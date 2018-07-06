@@ -6,6 +6,11 @@ import { ipcRenderer, shell } from 'electron';
 import path from 'path';
 import { homedir } from 'os';
 import mainGlobal from '@/util/main_global';
+import fse from 'fs-extra';
+
+export function ensureDirSync(dir) {
+  return fse.ensureDirSync(dir);
+}
 
 export function openEditor(openPath = '') {
   const basePath = '/Applications/Visual Studio Code.app';

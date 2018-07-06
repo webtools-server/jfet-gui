@@ -41,9 +41,8 @@ export default {
       const ptyProcess = terminal.startTerminal(project.path, {
         cwd: project.path
       });
-
-      console.log(ptyProcess.pid);
       const xterm = new Terminal();
+
       xterm.open(this.$refs.term);
       xterm.winptyCompatInit();
       xterm.webLinksInit();
@@ -59,6 +58,8 @@ export default {
         xterm.write(data);
       });
       this.xterm = xterm;
+      // invoke init
+      this.$emit('inited', xterm);
     }
   },
   destroyed() {

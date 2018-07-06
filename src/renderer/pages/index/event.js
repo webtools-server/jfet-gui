@@ -7,6 +7,7 @@ import path from 'path';
 import fse from 'fs-extra';
 import store from '@/store';
 import mainGlobal from '@/util/main_global';
+import { Notification } from 'element-ui';
 
 const { JFET_GUI_SETTING_DIR_NAME } = mainGlobal.constants;
 
@@ -28,6 +29,13 @@ function openOtherProject(dir) {
   store.dispatch('project/addProject', {
     name: pathname,
     path: dir
+  }).then((result) => {
+    if (!result.success) {
+      Notification.error({
+        title: '错误',
+        message: result.message
+      });
+    }
   });
 }
 

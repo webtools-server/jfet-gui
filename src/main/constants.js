@@ -3,6 +3,8 @@
  */
 
 const env = require('./env');
+const path = require('path');
+const { homedir } = require('os');
 
 // gui配置目录名称
 const JFET_GUI_SETTING_DIR_NAME = '.jfet';
@@ -40,6 +42,9 @@ const WEBSTORM_BASE_PATH = env.isWin
   ? 'C:/Program Files (x86)/JetBrains/WebStorm 2017.1/bin/webstorm.exe'
   : '/Applications/WebStorm.app';
 
+// 默认项目路径
+const DEFAULT_PROJECT_PATH = path.join(homedir(), 'jfet-workspace');
+
 // jfet网站
 const JFET_WEBSITE_URL = 'http://doc.fe.jyb.com/book/jfet-website/';
 
@@ -59,5 +64,6 @@ module.exports = {
   SUBLIME_TEXT_3_BASE_PATH,
   WEBSTORM_BASE_PATH,
   JFET_WEBSITE_URL,
-  JFET_API_DOC_URL
+  JFET_API_DOC_URL,
+  DEFAULT_PROJECT_PATH
 };
