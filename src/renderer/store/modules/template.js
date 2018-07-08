@@ -2,7 +2,9 @@
  * 模板store
  */
 
-import getGroupData from '@/util/get_group_data';
+import mainGlobal from '@/util/main_global';
+
+const getGroupData = mainGlobal.helper.getGroupData;
 
 // initial state
 const initialState = {

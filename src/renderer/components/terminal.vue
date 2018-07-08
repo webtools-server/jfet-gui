@@ -8,7 +8,6 @@ import * as fullscreen from 'xterm/lib/addons/fullscreen/fullscreen';
 import * as search from 'xterm/lib/addons/search/search';
 import * as webLinks from 'xterm/lib/addons/webLinks/webLinks';
 import * as winptyCompat from 'xterm/lib/addons/winptyCompat/winptyCompat';
-import terminal from '@/util/terminal';
 
 Terminal.applyAddon(fit);
 Terminal.applyAddon(fullscreen);
@@ -20,6 +19,10 @@ import { ipcRenderer } from 'electron';
 
 export default {
   props: {
+    text: {
+      type: String,
+      default: ''
+    },
     project: {
       type: Object,
       default: () => {}
@@ -37,10 +40,6 @@ export default {
   },
   methods: {
     startTerminal(project) {
-      // init new terminal
-      const ptyProcess = terminal.startTerminal(project.path, {
-        cwd: project.path
-      });
       const xterm = new Terminal();
 
       xterm.open(this.$refs.term);
@@ -49,14 +48,13 @@ export default {
       xterm.fit();
       xterm.focus();
 
-      xterm.write(terminal.getTerminalLogs(project.path));
+      if (this.text) {
+        xterm.write(this.text);
+      }
       xterm.on('data', (data) => {
-        ptyProcess.write(data);
+        this.$emit('data', data);
       });
 
-      ptyProcess.on('data', (data) => {
-        xterm.write(data);
-      });
       this.xterm = xterm;
       // invoke init
       this.$emit('inited', xterm);
@@ -89,18 +87,10 @@ export default {
 .xterm .xterm-helpers {
   position: absolute;
   top: 0;
-  /**
-   * The z-index of the helpers must be higher than the canvases in order for
-   * IMEs to appear on top.
-   */
   z-index: 10;
 }
 
 .xterm .xterm-helper-textarea {
-  /*
-   * HACK: to fix IE's blinking cursor
-   * Move textarea out of the screen to the far left, so that the cursor is not visible.
-   */
   position: absolute;
   opacity: 0;
   left: -9999em;
@@ -108,14 +98,12 @@ export default {
   width: 0;
   height: 0;
   z-index: -10;
-  /** Prevent wrapping so the IME appears against the textarea at the correct position */
   white-space: nowrap;
   overflow: hidden;
   resize: none;
 }
 
 .xterm .composition-view {
-  /* TODO: Composition position got messed up somewhere */
   background: #000;
   color: #FFF;
   display: none;
@@ -129,7 +117,6 @@ export default {
 }
 
 .xterm .xterm-viewport {
-  /* On OS X this is required in order for the scroll bar to appear fully opaque */
   background-color: #000;
   overflow-y: scroll;
   cursor: default;
@@ -168,7 +155,6 @@ export default {
 }
 
 .xterm.enable-mouse-events {
-  /* When mouse events are enabled (eg. tmux), revert to the standard pointer cursor */
   cursor: default;
 }
 
@@ -177,7 +163,6 @@ export default {
 }
 
 .xterm.xterm-cursor-crosshair {
-  /* Column selection mode */
   cursor: crosshair;
 }
 

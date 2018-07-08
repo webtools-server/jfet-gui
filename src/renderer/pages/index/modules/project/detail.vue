@@ -23,10 +23,16 @@
         @click="handleRunCommand(item)"
         type="text"
         size="mini"
-        icon="el-icon-fa-play-circle">{{item.name}}</el-button>
+        :icon="item.running ? 'el-icon-fa-stop-circle-o' : 'el-icon-fa-play-circle'">{{item.name}}</el-button>
     </div>
     <div class="project-detail__body">
-      <terminal :project="project" @inited="handleTerminalInited"></terminal>
+      <terminal
+        ref="terminal"
+        :text="xtermText"
+        :project="project"
+        @data="handleTerminalData"
+        @inited="handleTerminalInited">
+      </terminal>
     </div>
     <el-dialog
       class="project-detail__setting"
@@ -71,11 +77,11 @@
 import { mapGetters } from 'vuex';
 import * as helper from '@/util/helper';
 import Terminal from '@/components/terminal.vue';
-import terminal from '@/util/terminal';
 
 export default {
   data() {
     return {
+      session: null,
       project: {},
       projectSettingDialogVisible: false
     };
@@ -85,23 +91,33 @@ export default {
   },
   computed: mapGetters({
     commands: 'project/commands',
-    dependencies: 'project/dependencies'
+    dependencies: 'project/dependencies',
+    xtermText: 'project/xtermText'
   }),
-  created() {
-    this.init();
-  },
-  mounted() {
-    
+  async created() {
+    await this.init();
   },
   methods: {
-    init() {
+    async init() {
       const pathname = decodeURIComponent(this.$route.query.path);
       // 查询项目
-      this.$store.dispatch('project/queryProject', pathname).then((project) => {
-        // 初始化项目
-        this.$store.dispatch('project/initProject', project);
-        this.project = project || {};
+      const project = await this.$store.dispatch('project/queryProject', pathname);
+      // 初始化项目
+      await this.$store.dispatch('project/initProject', project);
+      // 初始化终端
+      const session = await this.$store.dispatch('project/initSession', {
+        cwd: project.path
       });
+      session.on('session:data', (data) => {
+        if (this.$refs.terminal && this.$refs.terminal.xterm) {
+          this.$refs.terminal.xterm.write(data);
+        }
+      });
+      this.session = session;
+      this.project = project || {};
+    },
+    handleTerminalData(data) {
+      this.session.write(data);
     },
     handleTerminalInited(term) {
       if (this.$route.query.init) {
@@ -112,7 +128,7 @@ export default {
         if (template.force) {
           command.push('-f');
         }
-        terminal.writeTerminal(this.project.path, command.join(' ') + '\n');
+        this.session.write(command.join(' ') + '\n');
       }
     },
     handleProjectSetting() {
@@ -128,10 +144,27 @@ export default {
       helper.openFolder(this.project.path);
     },
     handleInstallDeps() {
-      terminal.writeTerminal(this.project.path, 'npm i' + '\r\n');
+      this.session.write('npm i' + '\n');
     },
     handleRunCommand(item) {
-      terminal.writeTerminal(this.project.path, item.command + '\r\n');
+      if (item.running) {
+        this.$store.dispatch('project/stopCommand', {
+          cwd: this.project.path,
+          command: item.command
+        });
+      } else {
+        this.$store.dispatch('project/startCommand', {
+          cwd: this.project.path,
+          command: item.command
+        }).then((session) => {
+          session.on('session:data', (data) => {
+            if (this.$refs.terminal && this.$refs.terminal.xterm) {
+              this.$refs.terminal.xterm.write(data);
+            }
+          });
+          session.write(item.command + '\n');
+        });
+      }
     },
     onFulfilled(result) {
       if (!result.success) {

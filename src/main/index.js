@@ -3,10 +3,13 @@
  */
 
 const { app, BrowserWindow } = require('electron');
+const fse = require('fs-extra');
 const url = require('url');
 const path = require('path');
 
 const service = require('./service');
+const sessions = require('./sessions');
+const helper = require('./helper');
 const env = require('./env');
 const constants = require('./constants');
 
@@ -70,9 +73,12 @@ app.on('activate', () => {
   }
 });
 
+fse.ensureDirSync(constants.DEFAULT_PROJECT_PATH);
 // 在这个文件中，你可以续写应用剩下主进程代码。
 // 也可以拆分成几个文件，然后用 require 导入。
 
 global.services = service;
+global.sessions = sessions;
+global.helper = helper;
 global.env = env;
 global.constants = constants;
