@@ -11,3 +11,6 @@ run/
 .DS_Store
 *.sw*
 *.un~
+release/
+app/main
+app/public

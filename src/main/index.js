@@ -19,7 +19,8 @@ require('./event');
 // be closed automatically when the JavaScript object is garbage collected.
 let win = null;
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+// const isDevelopment = process.env.NODE_ENV !== 'production';
+const isDevelopment = false;
 
 function createWindow() {
   // 创建浏览器窗口。
@@ -33,7 +34,7 @@ function createWindow() {
     win.loadURL('http://127.0.0.1:2018');
   } else {
     win.loadURL(url.format({
-      pathname: path.join(__dirname, 'index.html'),
+      pathname: path.join(__dirname, '../public/index.html'),
       protocol: 'file',
       slashes: true
     }));

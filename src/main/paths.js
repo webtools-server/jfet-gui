@@ -7,8 +7,8 @@ const path = require('path');
 const env = require('./env');
 
 const APP_PATH = env.isDev ? path.join(process.cwd(), 'src') : path.join(process.resourcesPath, 'app');
-const NODE_PATH = path.join(APP_PATH, 'node');
 const NPM_BIN_PATH = path.join(process.cwd(), 'node_modules', '.bin');
+const NODE_PATH = path.join(NPM_BIN_PATH, 'node');
 
 const npmEnv = npmRunPath.env();
 const pathEnv = [

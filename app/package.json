@@ -1,0 +1,30 @@
+{
+  "name": "jfet-gui",
+  "version": "1.0.0",
+  "description": "加油宝前端开发工具",
+  "main": "./main/index.js",
+  "scripts": {
+    "node": "nodeinstall",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@jyb/jfet": "^1.3.4",
+    "@jyb/jfet-build": "^1.3.6",
+    "@jyb/jfet-image": "^1.3.4",
+    "@jyb/jfet-init": "^1.3.0",
+    "@jyb/jfet-server": "^1.3.7",
+    "@jyb/jfet-solution-h5act": "^1.3.5",
+    "concurrently": "^3.6.0",
+    "cross-env": "^5.2.0",
+    "fs-extra": "^6.0.1",
+    "node-pty": "^0.7.6",
+    "nodeinstall": "^0.1.3",
+    "npm-run-path": "^2.0.2"
+  },
+  "engines": {
+    "install-node": "^8.11.3"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

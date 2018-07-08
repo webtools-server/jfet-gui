@@ -7,8 +7,8 @@ const fse = require('fs-extra');
 
 // public路径
 const publicPathMap = {
-  test: '', // 测试环境
-  production: '', // 预发布/生产环境
+  development: '/', // 开发
+  production: '', // 打包
 };
 
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
       scanEntry: { pattern: path.join(__dirname, 'pages/**/index.js') },
       setOutput: {
         path: publicDir,
-        publicPath: publicPathMap[process.env.BUILD_ENV] || '/'
+        publicPath: (publicPathMap[process.env.NODE_ENV] === undefined) ? publicPathMap.development : publicPathMap[process.env.NODE_ENV]
       },
       resolveAliases: {
         vue$: 'vue/dist/vue.common.js',
@@ -60,6 +60,18 @@ module.exports = {
 
     context.on('before', () => {
       fse.emptyDirSync(publicDir);
+    });
+
+    context.on('after', () => {
+      if (context.env !== 'watch') {
+        const appPublicPath = path.join(process.cwd(), 'app/public');
+        const appMainPath = path.join(process.cwd(), 'app/main');
+
+        fse.emptyDirSync(appPublicPath);
+        fse.emptyDirSync(appMainPath);
+        fse.copySync(path.join(__dirname, 'public'), appPublicPath);
+        fse.copySync(path.join(__dirname, '../main'), appMainPath);
+      }
     });
   },
   server(abc, context) {
