@@ -14,7 +14,6 @@ function accessor(key, value) {
 }
 
 function get(key) {
-  console.log(ls.getItem(key));
   return JSON.parse(ls.getItem(key));
 }
 

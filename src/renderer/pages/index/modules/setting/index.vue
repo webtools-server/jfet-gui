@@ -10,7 +10,7 @@
           <el-form-item label="npm源">
             <el-select v-model="defaultNpmRegistry" placeholder="请选择">
               <el-option
-                v-for="item in setting.npmRegistry"
+                v-for="item in npmRegistry"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
@@ -22,12 +22,12 @@
         <div class="setting-child-box">
           <el-form-item label="编辑器">
             <el-radio-group v-model="defaultEditor">
-              <el-radio v-for="(item, index) in setting.editor" :key="index" :label="item.label">{{item.label}}</el-radio>
+              <el-radio v-for="(item, index) in editor" :key="index" :label="item.label">{{item.label}}</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="安装路径">
             <el-input v-model="installPath" disabled>
-              <el-button @click="handleChangeInstallPath" slot="append" icon="el-icon-fa-folder-open-o"></el-button>
+              <!-- <el-button @click="handleChangeInstallPath" slot="append" icon="el-icon-fa-folder-open-o"></el-button> -->
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -61,7 +61,9 @@ export default {
   },
   computed: {
     ...mapGetters({
-      setting: 'setting/setting'
+      setting: 'setting/setting',
+      npmRegistry: 'setting/npmRegistry',
+      editor: 'setting/editor'
     }),
     templateRepository: {
       get() {
@@ -90,17 +92,35 @@ export default {
   },
   methods: {
     setDefaultEditorPath(editorName) {
-      const editor = this.setting.editor.find(editor => editor.label === editorName) || {};
+      const editor = this.editor.find(editor => editor.label === editorName) || {};
       this.installPath = editor.path || '';
     },
     handleChangeInstallPath() {
       
     },
     handleSubmit() {
-      console.log('submit!');
+      this.$store.dispatch('setting/saveSetting').then((result) => {
+        if (result.success) {
+          this.$message.success('保存成功');
+        } else {
+          this.$message.error(result.message);
+        }
+      });
     },
     handleReset() {
-
+      this.$confirm('此操作将重置所有配置, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('setting/resetSetting').then((result) => {
+          if (result.success) {
+            this.$message.success('重置成功');
+          } else {
+            this.$message.error(result.message);
+          }
+        });
+      }).catch(() => {});
     }
   }
 };
