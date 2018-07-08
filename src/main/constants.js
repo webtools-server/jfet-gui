@@ -15,6 +15,8 @@ const JFET_GUI_COMMAND_SETTING_FILE = 'command.json';
 // 项目存储名称
 const PROJECT_STORAGE_NAME = 'projectList';
 
+const SETTING = 'setting';
+
 // 模板仓库
 const TEMPLATE_REPOSITORY = 'http://git.jtjr.com/groups/h5_webtools_grp';
 
@@ -65,5 +67,6 @@ module.exports = {
   WEBSTORM_BASE_PATH,
   JFET_WEBSITE_URL,
   JFET_API_DOC_URL,
-  DEFAULT_PROJECT_PATH
+  DEFAULT_PROJECT_PATH,
+  SETTING
 };

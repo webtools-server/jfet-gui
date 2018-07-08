@@ -14,12 +14,12 @@ const { JFET_GUI_SETTING_DIR_NAME } = mainGlobal.constants;
 ipcRenderer.on('selected-directory', (event, args) => {
   if (Array.isArray(args)) {
     args.forEach(async (arg) => {
-      const exist = await fse.pathExists(path.join(arg, JFET_GUI_SETTING_DIR_NAME));
-      if (exist) {
-        openJfetProject(arg);
-      } else {
+      // const exist = await fse.pathExists(path.join(arg, JFET_GUI_SETTING_DIR_NAME));
+      // if (exist) {
+      //   openJfetProject(arg);
+      // } else {
         openOtherProject(arg);
-      }
+      // }
     });
   }
 });

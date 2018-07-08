@@ -5,8 +5,6 @@
 import mainGlobal from '@/util/main_global';
 import lsStorage from '@/util/ls_storage';
 
-const SETTING = 'setting';
-
 const {
   TEMPLATE_REPOSITORY,
   NPM_REGISTRY,
@@ -15,17 +13,23 @@ const {
   WEBSTORM_NAME,
   VSCODE_BASE_PATH,
   SUBLIME_TEXT_3_BASE_PATH,
-  WEBSTORM_BASE_PATH
+  WEBSTORM_BASE_PATH,
+  SETTING
 } = mainGlobal.constants;
 
 // 默认配置
 const defaultSetting = {
   templateRepository: TEMPLATE_REPOSITORY,
   defaultNpmRegistry: NPM_REGISTRY.JNPM,
-  defaultEditor: VS_CODE_NAME
+  defaultEditor: VS_CODE_NAME,
+  editorBasePath: VSCODE_BASE_PATH
 };
 
-const storageSetting = lsStorage.get(SETTING);
+let storageSetting = lsStorage.get(SETTING);
+if (!storageSetting) {
+  storageSetting = Object.assign({}, defaultSetting);
+  lsStorage.set(SETTING, storageSetting);
+}
 
 // initial state
 const initialState = {
@@ -92,11 +96,22 @@ const actions = {
   },
   updateSetting({ commit }, setting) {
     commit('updateSetting', setting);
+  },
+  changeEditor({ commit, state }, editor) {
+    const editorData = state.editor.find(e => e.label === editor) || {};
+    commit('updateEditor', {
+      name: editor,
+      basePath: editorData.path || ''
+    });
   }
 };
 
 // mutations
 const mutations = {
+  updateEditor(state, editor) {
+    state.setting.defaultEditor = editor.name;
+    state.setting.editorBasePath = editor.basePath;
+  },
   resetSetting(state, setting) {
     if (!setting) return;
     state.setting = setting;

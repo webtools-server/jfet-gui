@@ -6,7 +6,8 @@ const { exec } = require('child_process');
 const env = require('./env');
 const path = require('path');
 
-function openEditor(basePath, openPath) {
+function openEditor(editorName, basePath, openPath) {
+  // TODO，支持其他编辑器
   let editorPath = basePath;
   if (env.isMac) {
     editorPath = path.join(basePath, '/Contents/Resources/app/bin/code');

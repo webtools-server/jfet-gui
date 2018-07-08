@@ -26,7 +26,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="安装路径">
-            <el-input v-model="installPath" disabled>
+            <el-input v-model="editorBasePath" disabled>
               <!-- <el-button @click="handleChangeInstallPath" slot="append" icon="el-icon-fa-folder-open-o"></el-button> -->
             </el-input>
           </el-form-item>
@@ -45,19 +45,10 @@ import * as helper from '@/util/helper';
 
 export default {
   data() {
-    return {
-      installPath: ''
-    };
+    return {};
   },
   created() {
-    this.setDefaultEditorPath(this.defaultEditor);
-  },
-  watch: {
-    defaultEditor(newVal, oldVal) {
-      if (newVal !== oldVal) {
-        this.setDefaultEditorPath(newVal);
-      }
-    }
+    
   },
   computed: {
     ...mapGetters({
@@ -65,6 +56,11 @@ export default {
       npmRegistry: 'setting/npmRegistry',
       editor: 'setting/editor'
     }),
+    editorBasePath: {
+      get() {
+        return this.$store.state.setting.setting.editorBasePath;
+      }
+    },
     templateRepository: {
       get() {
         return this.$store.state.setting.setting.templateRepository;
@@ -86,15 +82,11 @@ export default {
         return this.$store.state.setting.setting.defaultEditor;
       },
       set(value) {
-        this.$store.dispatch('setting/updateSetting', { key: 'defaultEditor', value });
+        this.$store.dispatch('setting/changeEditor', value);
       }
     }
   },
   methods: {
-    setDefaultEditorPath(editorName) {
-      const editor = this.editor.find(editor => editor.label === editorName) || {};
-      this.installPath = editor.path || '';
-    },
     handleChangeInstallPath() {
       
     },
