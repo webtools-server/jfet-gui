@@ -1,13 +1,15 @@
 {
   "name": "jfet-gui",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "./src/main/index.js",
   "scripts": {
+    "postinstall": "node ./scripts/postinstall.js",
+    "before": "node ./scripts/beforepack.js mac",
     "dev": "jfet build -w & jfet server -l -c ./src/renderer/public",
     "build": "cross-env NODE_ENV=production jfet build",
     "start": "electron .",
-    "pack": "build",
+    "pack": "DEBUG=electron-builder build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,12 +21,13 @@
   "license": "MIT",
   "devDependencies": {
     "@jyb/eslint-config-jyb": "^1.0.1",
+    "download": "^7.0.0",
+    "electron": "^2.0.3",
     "electron-builder": "^20.19.2",
-    "eslint": "^4.7.1",
-    "nodeinstall": "^0.1.3",
-    "electron": "^2.0.3"
+    "eslint": "^4.7.1"
   },
   "dependencies": {
+    "fix-path": "^2.1.0",
     "fs-extra": "^6.0.1",
     "node-pty": "^0.7.6",
     "npm-run-path": "^2.0.2"
@@ -32,21 +35,23 @@
   "jfetOptions": {
     "configFilePath": "src/renderer"
   },
+  "nodeVersion": "v8.11.3",
   "build": {
     "productName": "jfet-gui",
     "appId": "com.jyblife.jfet",
-    
+    "asar": false,
+    "npmRebuild": false,
     "win": {
       "target": [
         "nsis"
       ],
-      "icon": "static/icon"
+      "icon": "static/icon/icon.ico"
     },
     "mac": {
       "target": [
         "dmg"
       ],
-      "icon": "static/icon"
+      "icon": "static/icon/icon.icns"
     },
     "linux": {
       "target": [

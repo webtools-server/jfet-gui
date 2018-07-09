@@ -2,7 +2,7 @@
  * main
  */
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
 const fse = require('fs-extra');
 const url = require('url');
 const path = require('path');
@@ -12,15 +12,19 @@ const sessions = require('./sessions');
 const helper = require('./helper');
 const env = require('./env');
 const constants = require('./constants');
+const MenuTemplate = require('./menu');
 
+// require('./before-init');
 require('./event');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win = null;
 
-// const isDevelopment = process.env.NODE_ENV !== 'production';
-const isDevelopment = false;
+const setApplicationMenu = () => {
+  const menus = [MenuTemplate];
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
+};
 
 function createWindow() {
   // 创建浏览器窗口。
@@ -30,7 +34,7 @@ function createWindow() {
   });
 
   // 然后加载应用的 index.html
-  if (isDevelopment) {
+  if (env.isDev) {
     win.loadURL('http://127.0.0.1:2018');
   } else {
     win.loadURL(url.format({
@@ -39,9 +43,6 @@ function createWindow() {
       slashes: true
     }));
   }
-
-  // 打开开发者工具
-  win.webContents.openDevTools();
 
   // 当 window 被关闭，这个事件会被触发。
   win.on('closed', () => {
@@ -55,7 +56,10 @@ function createWindow() {
 // Electron 会在初始化后并准备
 // 创建浏览器窗口时，调用这个函数。
 // 部分 API 在 ready 事件触发后才能使用。
-app.on('ready', createWindow);
+app.on('ready', () => {
+  setApplicationMenu();
+  createWindow();
+});
 
 // 当全部窗口关闭时退出。
 app.on('window-all-closed', () => {

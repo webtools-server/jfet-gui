@@ -18,6 +18,8 @@ module.exports = {
     context.setConfig({
       scanEntry: { pattern: path.join(__dirname, 'pages/**/index.js') },
       setOutput: {
+        filename: '[name]-[chunkhash:8].js',
+        chunkFilename: '[name]-[chunkhash:8].js',
         path: publicDir,
         publicPath: (publicPathMap[process.env.NODE_ENV] === undefined) ? publicPathMap.development : publicPathMap[process.env.NODE_ENV]
       },
@@ -28,6 +30,18 @@ module.exports = {
         routes: path.join(__dirname, 'routes'),
         components: path.join(__dirname, 'components')
       },
+      extractTextScss: '[name]-[chunkhash:8].css',
+      extractTextVue: '[name].vue-[chunkhash:8].css',
+      image: {
+        name: '[name]-[hash:8].[ext]'
+      },
+      svg: {
+        name: '[name]-[hash:8].[ext]'
+      },
+      font: {
+        name: '[name]-[hash:8].[ext]'
+      },
+      uglifyJsPlugin: false,
       sass: {
         includePaths: ['node_modules']
       },

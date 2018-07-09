@@ -53,6 +53,31 @@ const JFET_WEBSITE_URL = 'http://doc.fe.jyb.com/book/jfet-website/';
 // jfet API文档
 const JFET_API_DOC_URL = 'http://doc.fe.jyb.com/book/workflow/index.html';
 
+const APP_PATH = env.isDev ? path.join(process.cwd(), 'src') : path.join(process.resourcesPath, 'app');
+
+// node
+const NODE_PATH = path.join(APP_PATH, 'node');
+
+// npm
+const NPM_BIN_PATH = env.isDev ?
+  path.join(process.cwd(), 'node_modules', '.bin') :
+  path.join(process.resourcesPath, 'app', 'bin');
+
+// jfet
+const JFET_BIN_PATH = env.isDev ?
+  path.join(process.cwd(), 'node_modules', '.bin') :
+  path.join(process.resourcesPath, 'app', 'node_modules', '@jyb', 'jfet', 'bin');
+
+// cross-env
+const CROSS_ENV_BIN_PATH = env.isDev ?
+  path.join(process.cwd(), 'node_modules', '.bin') :
+  path.join(process.resourcesPath, 'app', 'node_modules', 'cross-env');
+
+// concurrently
+const CONCURRENTLY_BIN_PATH = env.isDev ?
+  path.join(process.cwd(), 'node_modules', '.bin') :
+  path.join(process.resourcesPath, 'app', 'node_modules', 'concurrently');
+
 module.exports = {
   JFET_GUI_SETTING_DIR_NAME,
   JFET_GUI_COMMAND_SETTING_FILE,
@@ -68,5 +93,11 @@ module.exports = {
   JFET_WEBSITE_URL,
   JFET_API_DOC_URL,
   DEFAULT_PROJECT_PATH,
-  SETTING
+  SETTING,
+  APP_PATH,
+  NPM_BIN_PATH,
+  JFET_BIN_PATH,
+  CROSS_ENV_BIN_PATH,
+  CONCURRENTLY_BIN_PATH,
+  NODE_PATH
 };

@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-  isDev: process.env.NODE_ENV !== 'production',
+  isDev: false, // process.env.NODE_ENV !== 'production'
   isMac: process.platform === 'darwin',
   isWin: process.platform === 'win32',
   isLinux: process.platform === 'linux',

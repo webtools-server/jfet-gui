@@ -4,18 +4,29 @@
 
 const npmRunPath = require('npm-run-path');
 const path = require('path');
+const fixPath = require('fix-path');
 const env = require('./env');
+const constants = require('./constants');
 
-const APP_PATH = env.isDev ? path.join(process.cwd(), 'src') : path.join(process.resourcesPath, 'app');
-const NPM_BIN_PATH = path.join(process.cwd(), 'node_modules', '.bin');
-const NODE_PATH = path.join(NPM_BIN_PATH, 'node');
+const {
+  NPM_BIN_PATH,
+  NODE_PATH,
+  JFET_BIN_PATH,
+  CROSS_ENV_BIN_PATH,
+  CONCURRENTLY_BIN_PATH
+} = constants;
+
+fixPath();
 
 const npmEnv = npmRunPath.env();
 const pathEnv = [
   process.env.Path,
   npmEnv.PATH,
   NODE_PATH,
-  NPM_BIN_PATH
+  NPM_BIN_PATH,
+  JFET_BIN_PATH,
+  CROSS_ENV_BIN_PATH,
+  CONCURRENTLY_BIN_PATH
 ].filter(p => !!p).join(path.delimiter);
 
 // 临时处理

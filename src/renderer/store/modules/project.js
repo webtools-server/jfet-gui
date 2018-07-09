@@ -149,6 +149,8 @@ const actions = {
     // 存储
     lsStorage.set(PROJECT_STORAGE_NAME, projectList);
     commit('initProjectList', projectList);
+    // stop session
+    projectSession.stop(project.path);
   },
   // 查询项目
   queryProject(context, pathname) {
