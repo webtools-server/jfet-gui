@@ -110,7 +110,12 @@ export default {
       });
       session.on('session:data', (data) => {
         if (this.$refs.terminal && this.$refs.terminal.xterm) {
-          this.$refs.terminal.xterm.write(data);
+          // 初始化成功，需要重新初始化项目
+          if (/初始化([\w\W]+)?模板完成/.test(data)) {
+            this.$store.dispatch('project/initProject', project)
+          } else {
+            this.$refs.terminal.xterm.write(data);
+          }
         }
       });
       this.session = session;
