@@ -21,26 +21,26 @@
       :close-on-click-modal="false"
       :visible.sync="createProjectDialogVisible">
       <div class="create-project-wrap">
-        <el-form ref="projectForm" :model="projectForm" :rules="projectValidRules" label-width="110px" size="mini">
+        <el-form ref="projectForm" label-width="110px" size="mini">
           <el-form-item label="当前模板">
-            <span>{{projectForm.templateName}}</span>
+            <span>{{templateName}}</span>
           </el-form-item>
           <el-form-item label="安装路径" prop="installPath">
-            <el-input v-model="projectForm.installPath" disabled>
+            <el-input v-model="installPath" disabled>
               <el-button @click="handleChangeInstallPath" slot="append" icon="el-icon-fa-folder-open-o"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item label="项目目录名" prop="name">
-            <el-input v-model="projectForm.name" placeholder="请输入项目目录名"></el-input>
+            <el-input v-model="projectName" placeholder="请输入项目目录名（必填）"></el-input>
           </el-form-item>
           <el-form-item label="项目别名" prop="alias">
-            <el-input v-model="projectForm.alias" placeholder="请输入项目别名"></el-input>
+            <el-input v-model="projectAlias" placeholder="请输入项目别名（选填）"></el-input>
           </el-form-item>
           <el-form-item label="清空目录">
-            <el-switch v-model="projectForm.force"></el-switch>
+            <el-switch v-model="force"></el-switch>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="handleProjectCreate">立即创建</el-button>
+            <el-button type="primary" @click="handleProjectCreate" :disabled="createBtnDisabled">立即创建</el-button>
             <el-button @click="handleCancel">取消</el-button>
           </el-form-item>
         </el-form>
@@ -60,28 +60,50 @@ export default {
   data() {
     return {
       createProjectDialogVisible: false,
-      projectForm: {
-        templateName: '',
-        templateUrl: '',
-        installPath: DEFAULT_PROJECT_PATH,
-        name: '',
-        alias: '',
-        force: false
-      },
-      loading: true,
-      projectValidRules: {
-        installPath: [
-          { required: true, message: '安装路径不能为空', trigger: 'blur' }
-        ],
-        name: [
-          { required: true, message: '项目目录名不能为空', trigger: 'blur' }
-        ]
-      }
+      loading: true
     };
   },
-  computed: mapGetters({
-    templates: 'template/templates'
-  }),
+  computed: {
+    createBtnDisabled() {
+      return !(this.installPath && this.projectName);
+    },
+    templates() {
+      return this.$store.getters['template/templates'];
+    },
+    templateName() {
+      return this.$store.state.template.templateName;
+    },
+    templateUrl() {
+      return this.$store.state.template.templateUrl;
+    },
+    installPath() {
+      return this.$store.state.template.installPath;
+    },
+    projectName: {
+      get() {
+        return this.$store.state.template.projectName;
+      },
+      set(value) {
+        this.$store.commit('template/updateValue', ['projectName', value]);
+      }
+    },
+    projectAlias: {
+      get() {
+        return this.$store.state.template.projectAlias;
+      },
+      set(value) {
+        this.$store.commit('template/updateValue', ['projectAlias', value]);
+      }
+    },
+    force: {
+      get() {
+        return this.$store.state.template.force;
+      },
+      set(value) {
+        this.$store.commit('template/updateValue', ['force', value]);
+      }
+    }
+  },
   created() {
     this.$store.dispatch('template/fetchTemplate').then(() => {
       this.loading = false;
@@ -89,50 +111,51 @@ export default {
   },
   methods: {
     handleChangeInstallPath() {
-
+      this.$store.dispatch('template/changeInstallPath');
     },
     handleProjectCreate() {
-      this.$refs.projectForm.validate((valid) => {
-        if (valid) {
-          // 真实路径
-          const realPath = path.join(this.projectForm.installPath, this.projectForm.name);
-          // 添加项目
-          this.$store.dispatch('project/addProject', {
-            name: this.projectForm.name,
-            path: realPath,
-            template: { // 模板
-              name: this.projectForm.templateName,
-              url: this.projectForm.templateUrl,
-              force: this.projectForm.force
+      // 真实路径
+      const realPath = path.join(this.installPath, this.projectName);
+      // 添加项目
+      this.$store.dispatch('project/addProject', {
+        name: this.projectName,
+        path: realPath,
+        template: { // 模板
+          name: this.templateName,
+          url: this.templateUrl,
+          force: this.force
+        }
+      }).then((result) => {
+        if (result.success) {
+          // 先创建目录
+          helper.ensureDirSync(realPath);
+          // reset form
+          this.$store.commit('template/resetProjectForm');
+          // 跳转项目详情页面，并执行init命令
+          this.$router.push({
+            path: '/project/detail',
+            query: {
+              path: encodeURIComponent(realPath),
+              init: true
             }
-          }).then((result) => {
-            if (result.success) {
-              // 先创建目录
-              helper.ensureDirSync(realPath);
-              // 跳转项目详情页面，并执行init命令
-              this.$router.push({
-                path: '/project/detail',
-                query: {
-                  path: encodeURIComponent(realPath),
-                  init: true
-                }
-              });
-            } else {
-              this.$notify.error({
-                title: '错误',
-                message: result.message
-              });
-            }
+          });
+        } else {
+          this.$notify.error({
+            title: '错误',
+            message: result.message
           });
         }
       });
     },
     handleCancel() {
       this.createProjectDialogVisible = false;
+      this.$store.commit('template/resetProjectForm');
     },
     handleCreateProject(item) {
-      this.projectForm.templateName = item.name;
-      this.projectForm.templateUrl = item.http_url_to_repo;
+      this.$store.commit('template/updateValue', [
+        ['templateName', item.name],
+        ['templateUrl', item.http_url_to_repo]
+      ]);
       this.createProjectDialogVisible = true;
     },
     handleViewTemplate(item) {

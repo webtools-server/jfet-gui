@@ -6,13 +6,13 @@ import mainGlobal from '@/util/main_global';
 import lsStorage from '@/util/ls_storage';
 import fse from 'fs-extra';
 import path from 'path';
-import { homedir } from 'os';
 import { Notification } from 'element-ui';
 
 const {
   PROJECT_STORAGE_NAME,
   JFET_GUI_SETTING_DIR_NAME,
-  JFET_GUI_COMMAND_SETTING_FILE
+  JFET_GUI_COMMAND_SETTING_FILE,
+  DEFAULT_PROJECT_PATH
 } = mainGlobal.constants;
 const projectSession = mainGlobal.sessions.projectSession;
 
@@ -37,7 +37,7 @@ const actions = {
   // 打开项目
   async openProject({ dispatch }) {
     const result = await mainGlobal.folder.select({
-      defaultPath: path.join(homedir(), 'jfet-workspace')
+      defaultPath: DEFAULT_PROJECT_PATH
     });
     if (result.success) {
       if (Array.isArray(result.data)) {
