@@ -11,6 +11,7 @@
     "start": "electron .",
     "pack:debug": "DEBUG=electron-builder build",
     "pack": "build",
+    "rebuild": "electron-rebuild -d=https://gh-contractor-zcbenz.cnpmjs.org/atom-shell/dist/ -m ./app",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -25,6 +26,7 @@
     "download": "^7.0.0",
     "electron": "^2.0.3",
     "electron-builder": "^20.19.2",
+    "electron-rebuild": "^1.8.1",
     "eslint": "^4.7.1"
   },
   "dependencies": {

@@ -6,6 +6,7 @@ const EventEmitter = require('events');
 const os = require('os');
 const pty = require('node-pty');
 const processEnv = require('../paths');
+const env = require('../env');
 
 const defaultOptions = {
   encoding: 'utf8',
@@ -31,6 +32,13 @@ class Session extends EventEmitter {
   }
   write(content) {
     this.pty.write(content);
+  }
+  writeln(content) {
+    if (env.isWin) {
+      this.write(`${content}\r\n`);
+    } else {
+      this.write(`${content}\n`);
+    }
   }
   destroy() {
     try {

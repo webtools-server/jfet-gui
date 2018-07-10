@@ -34,7 +34,8 @@ function createWindow() {
   // 创建浏览器窗口。
   win = new BrowserWindow({
     width: 880,
-    height: 600
+    height: 600,
+    autoHideMenuBar: true
   });
 
   // 然后加载应用的 index.html

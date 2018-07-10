@@ -128,12 +128,12 @@ export default {
       if (this.$route.query.init) {
         const template = this.project.template || {};
         // jfet init -t 'https://npm.taobao.org' -f
-        const command = [`jfet init -t '${template.url}'`];
+        const command = [`jfet init -t ${template.url}`];
         // 清空目录
         if (template.force) {
           command.push('-f');
         }
-        this.session.write(command.join(' ') + '\n');
+        this.session.writeln(command.join(' '));
       }
     },
     handleProjectSetting() {
@@ -149,7 +149,7 @@ export default {
       helper.openFolder(this.project.path);
     },
     handleInstallDeps() {
-      this.session.write('npm i' + '\n');
+      this.session.writeln('npm i');
     },
     handleRunCommand(item) {
       if (item.running) {
@@ -167,7 +167,7 @@ export default {
               this.$refs.terminal.xterm.write(data);
             }
           });
-          session.write(item.command + '\n');
+          session.writeln(item.command);
         });
       }
     },

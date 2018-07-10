@@ -13,6 +13,10 @@ body {
     // background-color: #f8f8f8;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 @include generateCommSpaces;
 @include generateCommColors;
 @include generateCommFontSize;
