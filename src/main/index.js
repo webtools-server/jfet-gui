@@ -14,7 +14,7 @@ const env = require('./env');
 const constants = require('./constants');
 const MenuTemplate = require('./menu');
 
-// require('./before-init');
+require('./before-init');
 require('./event');
 
 // Keep a global reference of the window object, if you don't, the window will

@@ -61,22 +61,12 @@ const NODE_PATH = path.join(APP_PATH, 'node');
 // npm
 const NPM_BIN_PATH = env.isDev ?
   path.join(process.cwd(), 'node_modules', '.bin') :
-  path.join(process.resourcesPath, 'app', 'bin');
+  path.join(process.resourcesPath, 'app', 'node_modules', '.bin');
 
 // jfet
 const JFET_BIN_PATH = env.isDev ?
   path.join(process.cwd(), 'node_modules', '.bin') :
   path.join(process.resourcesPath, 'app', 'node_modules', '@jyb', 'jfet', 'bin');
-
-// cross-env
-const CROSS_ENV_BIN_PATH = env.isDev ?
-  path.join(process.cwd(), 'node_modules', '.bin') :
-  path.join(process.resourcesPath, 'app', 'node_modules', 'cross-env');
-
-// concurrently
-const CONCURRENTLY_BIN_PATH = env.isDev ?
-  path.join(process.cwd(), 'node_modules', '.bin') :
-  path.join(process.resourcesPath, 'app', 'node_modules', 'concurrently');
 
 module.exports = {
   JFET_GUI_SETTING_DIR_NAME,
@@ -97,7 +87,5 @@ module.exports = {
   APP_PATH,
   NPM_BIN_PATH,
   JFET_BIN_PATH,
-  CROSS_ENV_BIN_PATH,
-  CONCURRENTLY_BIN_PATH,
   NODE_PATH
 };

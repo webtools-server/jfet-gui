@@ -10,10 +10,7 @@ const constants = require('./constants');
 
 const {
   NPM_BIN_PATH,
-  NODE_PATH,
-  JFET_BIN_PATH,
-  CROSS_ENV_BIN_PATH,
-  CONCURRENTLY_BIN_PATH
+  NODE_PATH
 } = constants;
 
 fixPath();
@@ -23,10 +20,7 @@ const pathEnv = [
   process.env.Path,
   npmEnv.PATH,
   NODE_PATH,
-  NPM_BIN_PATH,
-  JFET_BIN_PATH,
-  CROSS_ENV_BIN_PATH,
-  CONCURRENTLY_BIN_PATH
+  NPM_BIN_PATH
 ].filter(p => !!p).join(path.delimiter);
 
 // 临时处理
