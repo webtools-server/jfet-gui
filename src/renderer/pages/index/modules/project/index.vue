@@ -52,7 +52,7 @@ export default {
       this.$router.push({ path: '/template/index' });
     },
     handleOpenProject() {
-      helper.openProject();
+      this.$store.dispatch('project/openProject');
     },
     handleDeleteProject(item) {
       this.$confirm('此操作将删除该项目, 但是不删除文件，是否继续?', '提示', {

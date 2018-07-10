@@ -25,11 +25,15 @@ const defaultSetting = {
   editorBasePath: VSCODE_BASE_PATH
 };
 
+// 初始化
 let storageSetting = lsStorage.get(SETTING);
 if (!storageSetting) {
   storageSetting = Object.assign({}, defaultSetting);
   lsStorage.set(SETTING, storageSetting);
 }
+
+// 设置npm源
+mainGlobal.helper.setRegistry(storageSetting.defaultNpmRegistry);
 
 // initial state
 const initialState = {
@@ -68,6 +72,8 @@ const actions = {
   saveSetting({ state }) {
     try {
       lsStorage.set(SETTING, state.setting);
+      // 设置npm源
+      mainGlobal.helper.setRegistry(state.setting.defaultNpmRegistry);
       return {
         success: true,
         message: ''
@@ -82,6 +88,8 @@ const actions = {
   resetSetting({ commit }) {
     try {
       lsStorage.set(SETTING, defaultSetting);
+      // 设置npm源
+      mainGlobal.helper.setRegistry(defaultSetting.defaultNpmRegistry);
       commit('resetSetting', defaultSetting);
       return {
         success: true,

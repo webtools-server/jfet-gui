@@ -2,9 +2,7 @@
  * helper
  */
 
-import { ipcRenderer, shell } from 'electron';
-import path from 'path';
-import { homedir } from 'os';
+import { shell } from 'electron';
 import mainGlobal from '@/util/main_global';
 import lsStorage from '@/util/ls_storage';
 import fse from 'fs-extra';
@@ -26,15 +24,9 @@ export function openTerminal(openPath = '') {
 }
 
 export function openFolder(openPath = '') {
-  shell.showItemInFolder(openPath);
+  mainGlobal.folder.open(openPath);
 }
 
 export function openExternal(url) {
   shell.openExternal(url);
-}
-
-export function openProject() {
-  ipcRenderer.send('open-dir-dialog', {
-    defaultPath: path.join(homedir(), 'jfet-workspace')
-  });
 }

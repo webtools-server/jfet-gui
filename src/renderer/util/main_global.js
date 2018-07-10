@@ -9,5 +9,6 @@ export default {
   sessions: remote.getGlobal('sessions'),
   helper: remote.getGlobal('helper'),
   env: remote.getGlobal('env'),
+  folder: remote.getGlobal('folder'),
   constants: remote.getGlobal('constants')
 };

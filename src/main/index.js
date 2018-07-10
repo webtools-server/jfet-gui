@@ -11,11 +11,12 @@ const service = require('./service');
 const sessions = require('./sessions');
 const helper = require('./helper');
 const env = require('./env');
+const folder = require('./folder');
 const constants = require('./constants');
 const MenuTemplate = require('./menu');
+const MenuDevTemplate = require('./menu/dev');
 
 require('./before-init');
-require('./event');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -23,6 +24,9 @@ let win = null;
 
 const setApplicationMenu = () => {
   const menus = [MenuTemplate];
+  if (env.isDev) {
+    menus.push(MenuDevTemplate);
+  }
   Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
@@ -86,4 +90,5 @@ global.services = service;
 global.sessions = sessions;
 global.helper = helper;
 global.env = env;
+global.folder = folder;
 global.constants = constants;

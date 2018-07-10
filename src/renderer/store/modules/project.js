@@ -6,6 +6,8 @@ import mainGlobal from '@/util/main_global';
 import lsStorage from '@/util/ls_storage';
 import fse from 'fs-extra';
 import path from 'path';
+import { homedir } from 'os';
+import { Notification } from 'element-ui';
 
 const {
   PROJECT_STORAGE_NAME,
@@ -32,6 +34,38 @@ const initialGetters = {
 
 // actions
 const actions = {
+  // 打开项目
+  async openProject({ dispatch }) {
+    const result = await mainGlobal.folder.select({
+      defaultPath: path.join(homedir(), 'jfet-workspace')
+    });
+    if (result.success) {
+      if (Array.isArray(result.data)) {
+        result.data.forEach((file) => {
+          const pathname = path.basename(file);
+          // 添加项目
+          dispatch('addProject', {
+            name: pathname,
+            path: file
+          }).then((res) => {
+            if (!res.success) {
+              Notification.error({
+                title: '错误',
+                message: res.message
+              });
+            }
+          });
+
+          // const exist = await fse.pathExists(path.join(arg, JFET_GUI_SETTING_DIR_NAME));
+          // if (exist) {
+          //   openJfetProject(arg);
+          // } else {
+          // openOtherProject(file);
+          // }
+        });
+      }
+    }
+  },
   // 初始化项目列表
   initProjectList({ commit }) {
     const projectList = lsStorage.get(PROJECT_STORAGE_NAME);

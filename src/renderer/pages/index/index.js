@@ -9,7 +9,6 @@ import { normalizeCurrency } from '@/util/filter';
 import App from './app.vue';
 import routes from './route';
 
-import './event';
 import './index.scss';
 
 Vue.use(VueRouter);
