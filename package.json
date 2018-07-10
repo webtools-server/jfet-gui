@@ -9,7 +9,8 @@
     "dev": "jfet build -w & jfet server -l -c ./src/renderer/public",
     "build": "cross-env NODE_ENV=production jfet build",
     "start": "electron .",
-    "pack": "DEBUG=electron-builder build",
+    "pack:debug": "DEBUG=electron-builder build",
+    "pack": "build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -46,18 +47,19 @@
       "target": [
         "nsis"
       ],
-      "icon": "static/icon/icon.ico"
+      "icon": "build/icons/icon.ico"
     },
     "mac": {
       "target": [
         "dmg"
       ],
-      "icon": "static/icon/icon.icns"
+      "icon": "build/icons/icon.icns"
     },
     "linux": {
       "target": [
         "deb"
-      ]
+      ],
+      "icon": "build/icons"
     },
     "directories": {
       "buildResources": "resources",
