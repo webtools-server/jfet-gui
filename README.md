@@ -1,5 +1,19 @@
 # jfet gui
 
+## TODO
+
+- 自动更新机制
+- tray
+- main代码编译
+- 自动打包
+- 增加扩展模块
+
+## node版本
+
+node版本在根目录下`package.json`下的`nodeVersion`字段设置
+
+设置之后，重新执行`npm i`会重新下载对应的node版本
+
 ## 开发
 
 ```shell
@@ -13,10 +27,24 @@ $ npm run dev
 $ npm start
 ```
 
-## TODO
+## 打包
 
-- 自动更新机制
-- tray
-- main代码编译
-- 自动打包
-- 增加扩展模块
+**mac**
+
+必须在macOS环境下打包
+
+```shell
+$ npm run beforepack:mac
+$ npm run pack
+```
+
+**win**
+
+必须在Windows环境下打包
+
+Windows下`app`目录第一次安装依赖完毕之后，需要执行`npm run rebuild`，修正部分依赖。
+
+```shell
+$ npm run beforepack:win
+$ npm run pack
+```
