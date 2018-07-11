@@ -16,6 +16,8 @@ node版本在根目录下`package.json`下的`nodeVersion`字段设置
 
 ## 开发
 
+安装的时候，需要注意[node-pty](https://github.com/Microsoft/node-pty)在Windows下的安装
+
 ```shell
 // 进入src/renderer目录，执行
 $ npm i
