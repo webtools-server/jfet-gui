@@ -1,6 +1,6 @@
 {
   "name": "jfet-gui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "加油宝前端开发工具",
   "main": "./main/index.js",
   "scripts": {
