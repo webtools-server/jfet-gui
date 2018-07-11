@@ -16,14 +16,17 @@
         <el-button @click="handleOpenFolder" type="text" icon="el-icon-fa-folder-open-o" size="mini">文件夹</el-button>
       </div>
     </div>
-    <div class="project-detail__command">
-      <el-button
-        v-for="(item, index) in commands"
-        :key="index"
-        @click="handleRunCommand(item)"
-        type="text"
-        size="mini"
-        :icon="item.running ? 'el-icon-fa-stop-circle-o' : 'el-icon-fa-play-circle'">{{item.name}}</el-button>
+    <div class="project-detail__command-wrap">
+      <div class="project-detail__command">
+        <el-button
+          v-for="(item, index) in commands"
+          :key="index"
+          @click="handleRunCommand(item)"
+          type="text"
+          size="mini"
+          :class="[item.running ? 'command-running' : '']"
+          :icon="item.running ? 'el-icon-fa-stop-circle-o' : 'el-icon-fa-play-circle'">{{item.name}}</el-button>
+      </div>
     </div>
     <div class="project-detail__body">
       <terminal
@@ -167,7 +170,7 @@ export default {
               this.$refs.terminal.xterm.write(data);
             }
           });
-          session.writeln(item.command);
+          session.writeln(`npm run ${item.key}`);
         });
       }
     },
@@ -186,6 +189,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.command-running {
+  color: #f56c6c;
+}
 .project-detail__head {
   height: 50px;
   box-sizing: border-box;
@@ -212,15 +218,26 @@ export default {
   font-size: 14px;
   font-weight: bold;
 }
+.project-detail__command-wrap {
+  position: relative;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  overflow-x: scroll;
+  height: 40px;
+  background-color: #fcfcfc;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+  -webkit-overflow-scrolling: touch;
+}
 .project-detail__command {
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 40px;
   padding-left: 10px;
   padding-right: 10px;
   line-height: 40px;
-  background-color: #fcfcfc;
   color: #666;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-  text-align: center;
 }
 .project-detail__body {
   box-sizing: border-box;

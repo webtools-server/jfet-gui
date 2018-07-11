@@ -19,13 +19,16 @@ const OUTPUT_BIN_PATH = path.join(APP_NODE_MODULES_PATH, '.bin');
 
 // 修正使用electron-builder打包之后忽略.bin目录的问题
 try {
-  if (!fse.existsSync(NPM_BIN_PATH)) {
-    fse.emptyDirSync(OUTPUT_BIN_PATH);
-    if (!env.isWin) {
-      symlink(APP_NODE_MODULES_PATH, OUTPUT_BIN_PATH);
-      execSync('chmod 755 *', { cwd: NPM_BIN_PATH });
-    } else {
-      createBinFile(APP_NODE_MODULES_PATH, OUTPUT_BIN_PATH);
+  // 非测试环境执行
+  if (!env.isDev) {
+    if (!fse.existsSync(NPM_BIN_PATH)) {
+      fse.emptyDirSync(OUTPUT_BIN_PATH);
+      if (!env.isWin) {
+        symlink(APP_NODE_MODULES_PATH, OUTPUT_BIN_PATH);
+        execSync('chmod 755 *', { cwd: NPM_BIN_PATH });
+      } else {
+        createBinFile(APP_NODE_MODULES_PATH, OUTPUT_BIN_PATH);
+      }
     }
   }
 } catch (e) {
