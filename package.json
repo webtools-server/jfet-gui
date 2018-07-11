@@ -5,7 +5,8 @@
   "main": "./src/main/index.js",
   "scripts": {
     "postinstall": "node ./scripts/postinstall.js",
-    "before": "node ./scripts/beforepack.js mac",
+    "beforepack:mac": "node ./scripts/beforepack.js mac",
+    "beforepack:win": "node ./scripts/beforepack.js win",
     "dev": "jfet build -w & jfet server -l -c ./src/renderer/public",
     "build": "cross-env NODE_ENV=production jfet build",
     "start": "electron .",
