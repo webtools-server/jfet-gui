@@ -1,5 +1,7 @@
 # jfet gui
 
+该仓库不再维护，新仓库：http://git.jtjr.com/jfet/jfet-gui
+
 ## TODO
 
 - 自动更新机制
